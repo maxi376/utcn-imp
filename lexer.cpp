@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "lexer.h"
+#include <limits.h> 
 
 
 
@@ -15,6 +16,10 @@ Token::Token(const Token &that)
     case Kind::STRING:
     case Kind::IDENT: {
       value_.StringValue = new std::string(*that.value_.StringValue);
+      break;
+    }
+    case Kind::INT: {
+      value_.IntValue = uint64_t(that.value_.IntValue);
       break;
     }
     default: {
@@ -42,6 +47,10 @@ Token &Token::operator=(const Token &that)
     case Kind::STRING:
     case Kind::IDENT: {
       value_.StringValue = new std::string(*that.value_.StringValue);
+      break;
+    }
+    case Kind::INT: {
+      value_.IntValue = uint64_t(that.value_.IntValue);
       break;
     }
     default: {
@@ -79,6 +88,14 @@ Token Token::String(const Location &l, const std::string &str)
 {
   Token tk(l, Kind::STRING);
   tk.value_.StringValue = new std::string(str);
+  return tk;
+}
+
+// -----------------------------------------------------------------------------
+Token Token::Integer(const Location &l, uint64_t val)
+{
+  Token tk(l, Kind::INT);
+  tk.value_.IntValue = val;
   return tk;
 }
 
@@ -206,7 +223,16 @@ const Token &Lexer::Next()
         if (word == "func") return tk_ = Token::Func(loc);
         if (word == "return") return tk_ = Token::Return(loc);
         if (word == "while") return tk_ = Token::While(loc);
+      
         return tk_ = Token::Ident(loc, word);
+      }
+      if (isdigit(chr_)){ 
+        uint64_t integer=0;
+        do {
+          integer=integer*10+chr_;
+          NextChar();
+        } while (IsIdentLetter(chr_));
+        return tk_ = Token::Integer(loc, integer);
       }
       Error("unknown character '" + std::string(1, chr_) + "'");
     }

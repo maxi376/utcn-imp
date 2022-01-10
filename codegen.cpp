@@ -177,7 +177,15 @@ void Codegen::LowerExpr(const Scope &scope, const Expr &expr)
     case Expr::Kind::CALL: {
       return LowerCallExpr(scope, static_cast<const CallExpr &>(expr));
     }
+    case Expr::Kind::INTEGER: {
+      return LowerIntExpr(scope, static_cast<const IntExpr &>(expr));
+    }
   }
+}
+
+void Codegen::LowerIntExpr(const Scope &scope, const IntExpr &expr)
+{
+      return LowerCallExpr(scope, static_cast<const CallExpr &>(expr));
 }
 
 // -----------------------------------------------------------------------------

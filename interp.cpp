@@ -26,6 +26,10 @@ void Interp::Run()
         Push(*(stack_.rbegin() + idx));
         continue;
       }
+      case Opcode::PUSH_INT: {
+        Push(prog_.Read<int64_t>(pc_));
+        continue;
+      }
       case Opcode::POP: {
         Pop();
         continue;

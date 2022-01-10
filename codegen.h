@@ -122,6 +122,7 @@ private:
   /// Lowers a single expression.
   void LowerExpr(const Scope &scope, const Expr &expr);
   /// Lowers a reference to an identifier.
+  void LowerIntExpr(const Scope &scope, const Expr &expr);
   void LowerRefExpr(const Scope &scope, const RefExpr &expr);
   /// Lowers a binary expression.
   void LowerBinaryExpr(const Scope &scope, const BinaryExpr &expr);
